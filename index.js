@@ -1,19 +1,25 @@
 const express = require('express');
+const { Contenedor } = require('./contenedor');
 
 const PORT = process.env.PORT || 8080;
 
 const app = express();
 
+const contenedor = new Contenedor("productos.txt");
+
 app.get('/', (req, res) => {
     res.send('Página de inicio')
 })
 
-app.get('/productos', (req, res) => {
-    res.send('')
+app.get('/productos', async (req, res) => {
+    const data = await contenedor.getAll();
+    res.send(data);
 })
 
-app.get('/productoRandom', (req, res) => {
-    res.send('')
+const sub = Math.random() * 10;
+app.get('/productoRandom', async (req, res) => {
+    const data = await contenedor.getById(sub);
+    res.send(data);
 })
 
 app.get('*', (req, res) => {
