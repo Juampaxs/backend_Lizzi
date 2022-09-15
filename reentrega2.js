@@ -26,8 +26,8 @@ class Contenedor {
     async getById(id) {
         try {
             let elemento;
-            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
-            const datos = JSON.parse(contenido);
+            let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            let datos = JSON.parse(contenido);
             datos.forEach(element => {
                 if (element.id == id) {
                     elemento = element;
@@ -44,7 +44,7 @@ class Contenedor {
 
     async getAll() {
         try {
-            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
             return JSON.parse(contenido);
         }
         catch (error) {
@@ -54,9 +54,9 @@ class Contenedor {
 
     async deleteById(id) {
         try {
-            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
-            const datos = JSON.parse(contenido);
-            const arr = datos.filter(element => element.id != id);
+            let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            let datos = JSON.parse(contenido);
+            let arr = datos.filter(element => element.id != id);
             await fs.promises.writeFile(`./${this.nombre}`, JSON.stringify(arr));
         }
         catch (error) {
