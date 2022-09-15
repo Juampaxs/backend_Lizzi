@@ -5,7 +5,7 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
-const contenedor = new Contenedor("productos.txt");
+const contenedor = new Contenedor("productos.json");
 
 app.get('/', (req, res) => {
     res.send('Página de inicio')
@@ -16,7 +16,8 @@ app.get('/productos', async (req, res) => {
     res.send(data);
 })
 
-const sub = Math.random() * 10;
+const sub = Math.floor(Math.random() * 10);
+
 app.get('/productoRandom', async (req, res) => {
     const data = await contenedor.getById(sub);
     res.send(data);

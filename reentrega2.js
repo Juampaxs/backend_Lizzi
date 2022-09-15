@@ -1,123 +1,87 @@
 const fs = require('fs');
-const { result } = require('lodash');
-
-async function guardar (objeto) {
-    try {
-        const contenido = await fs.promises.readFile('/productos.txt', 'utf-8');
-        const datos = JSON.parse(contenido);
-        let id = 1;
-        if (datos.length == 0) {   
-            objeto.id = id;
-        } else {
-            objeto.id = datos[datos.length - 1].id + 1;
-        }
-        datos.push(objeto);
-        contenido = JSON.stringify(datos);
-        try {
-            await fs.promises.writeFile('/productos.txt', contenido);
-            return objeto.id;
-        }
-        catch (error) {
-            console.log('Error al guardar archivo');
-        }
-    }
-    catch (error) {
-        console.log('Error al leer archivo');
-    }
-}
-
-async function obtenerObjeto (id) {
-    try {
-        const contenido = await fs.promises.readFile('/productos.txt', 'utf-8');
-        const datos = JSON.parse(contenido);
-        datos.forEach(element => {
-            if (element.id == id) {
-                return element;
-            } else {
-                return null;
-            }
-        });
-    }
-    catch (error) {
-        console.log('Error al leer archivo');
-    }
-}
-
-async function obtenerArray () {
-    try {
-        const contenido = await fs.promises.readFile('/productos.txt', 'utf-8');
-        return JSON.parse(contenido);
-    }
-    catch (error) {
-        console.log('Error al leer archivo');
-    }
-}
-
-async function eliminarId (id) {
-    try {
-        const contenido = await fs.promises.readFile('/productos.txt', 'utf-8');
-        const datos = JSON.parse(contenido);
-        const arr = datos.filter(element => element.id != id);
-        try {
-            await fs.promises.writeFile('/productos.txt', JSON.stringify(arr));
-        }
-        catch (error) {
-            console.log('Error al guardar archivo');
-        }
-    }
-    catch (error) {
-        console.log('Error al leer archivo');
-    }
-}
-
-async function eliminarId (id) {
-    try {
-        await fs.promises.writeFile('/productos.txt', '');
-    }
-    catch (error) {
-        console.log('Error al guardar archivo');
-    }
-}
 
 class Contenedor {
     constructor(nombre) {
         this.nombre = nombre;
     }
 
-    save(objeto) {
-        const id = guardar(objeto);
-        return id;
+    async save(objeto) {
+        try {
+            let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            let datos = JSON.parse(contenido);
+            if (datos.length == 0) {   
+                objeto.id = 1;
+            } else {
+                objeto.id = datos[datos.length - 1].id + 1;
+            }
+            datos.push(objeto);
+            await fs.promises.writeFile(`./${this.nombre}`, JSON.stringify(datos));
+            return objeto.id;
+        }
+        catch (error) {
+            console.log('Error al leer archivo guardar');
+        }
     }
 
-    getById(id) {
-        const objeto = obtenerObjeto(id);
-        return objeto;
+    async getById(id) {
+        try {
+            let elemento;
+            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            const datos = JSON.parse(contenido);
+            datos.forEach(element => {
+                if (element.id == id) {
+                    elemento = element;
+                } else {
+                    return null;
+                }
+            });
+            return elemento;
+        }
+        catch (error) {
+            console.log('Error al leer archivo 1 obj');
+        }
     }
 
-    getAll() {
-        const objeto = obtenerArray();
-        return objeto;
+    async getAll() {
+        try {
+            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            return JSON.parse(contenido);
+        }
+        catch (error) {
+            console.log('Error al leer archivo array');
+        }
     }
 
-    deleteById(id) {
-        eliminarId(id);
+    async deleteById(id) {
+        try {
+            const contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            const datos = JSON.parse(contenido);
+            const arr = datos.filter(element => element.id != id);
+            await fs.promises.writeFile(`./${this.nombre}`, JSON.stringify(arr));
+        }
+        catch (error) {
+            console.log('Error al leer archivo');
+        }
     }
 
-    deleteAll() {
-       eliminarArray();
+    async deleteAll() {
+        try {
+            await fs.promises.writeFile(`./${this.nombre}`, '');
+        }
+        catch (error) {
+            console.log('Error al guardar archivo');
+        }
     }
 }
 
-const contenedor = new Contenedor("productos.txt");
-const objeto1 = { title: "Producto 1", price: 123, thumbnail: "url1"}
+
+let contenedor = new Contenedor("productos.json");
+let objeto1 = { title: "Producto 1", price: 123, thumbnail: "url1", id: 1}
 contenedor.save(objeto1).then(result => {
     console.log(result);
 });
-const objeto2 = { title: "Producto 2", price: 123, thumbnail: "url2"}
-contenedor.save(objeto2);
-contenedor.getById(0).then(result => {
+contenedor.getById(2).then(result => {
     console.log(result);
 });
 contenedor.deleteById(1);
 contenedor.deleteAll();
-
