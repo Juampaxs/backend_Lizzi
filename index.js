@@ -6,6 +6,10 @@ const PORT = process.env.PORT || 8080;
 
 const app = express();
 
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 const contenedor = new Contenedor("productos.json");
 
 //GET
