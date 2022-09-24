@@ -20,6 +20,9 @@ router.get('/', async (req, res) => {
 router.get('/:id', async (req, res) => {
     let { id } = req.params;
     const data = await contenedor.getById(parseInt(id));
+    if (!data) {
+        return res.json({ error: 'producto no encontrado'});
+    }
     res.send(data);
 })
 

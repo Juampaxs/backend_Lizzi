@@ -29,7 +29,7 @@ app.use(express.static('public'));
 app.use(loggerMiddleware);
 
 //Routes
-app.use(apiRoutes);
+app.use('/api', apiRoutes);
 
 //GET
 
