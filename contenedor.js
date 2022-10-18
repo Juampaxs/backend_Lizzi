@@ -19,7 +19,7 @@ class Contenedor {
             return objeto.id;
         }
         catch (error) {
-            console.log('Error al leer archivo guardar');
+            console.log('Error al leer archivo');
         }
     }
 
@@ -38,7 +38,7 @@ class Contenedor {
             return elemento;
         }
         catch (error) {
-            console.log('Error al leer archivo 1 obj');
+            console.log('Error al leer archivo');
         }
     }
 
@@ -48,7 +48,7 @@ class Contenedor {
             return JSON.parse(contenido);
         }
         catch (error) {
-            console.log('Error al leer archivo array');
+            console.log('Error al leer archivo');
         }
     }
 
@@ -57,6 +57,22 @@ class Contenedor {
             let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
             let datos = JSON.parse(contenido);
             let arr = datos.filter(element => element.id != id);
+            await fs.promises.writeFile(`./${this.nombre}`, JSON.stringify(arr));
+        }
+        catch (error) {
+            console.log('Error al leer archivo');
+        }
+    }
+
+    async deleteByIdCarritoAndProducto(idCarrito, idProducto) {
+        try {
+            let contenido = await fs.promises.readFile(`./${this.nombre}`, 'utf-8');
+            let datos = JSON.parse(contenido);
+            let arr = datos.forEach(e => {
+                if (e.id == idCarrito) {
+                    e.productos.filter(element => element.id != idProducto);
+                }
+            });
             await fs.promises.writeFile(`./${this.nombre}`, JSON.stringify(arr));
         }
         catch (error) {

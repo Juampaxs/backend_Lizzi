@@ -29,12 +29,16 @@ router.get('/:id', async (req, res) => {
 //POST
 
 router.post('/', async (req, res) => {
-    let { title, price, thumbnail} = req.body;
+    let { name, description, code, thumbnail, price, stock} = req.body;
     let objeto = {
         id: null,
-        title,
+        timestamp: Date.now(), 
+        name,
+        description,
+        code,
+        thumbnail,
         price,
-        thumbnail 
+        stock 
     }
     const data = await contenedor.save(objeto);
     res.send(data);
@@ -44,21 +48,29 @@ router.post('/', async (req, res) => {
 
 router.put('/:id', async (req, res) => {
     let { id } = req.params;
-    let { title, price, thumbnail} = req.body;
+    let { name, description, code, thumbnail, price, stock} = req.body;
     let data = await contenedor.getAll();
     data.forEach(element => {
         if (element.id == parseInt(id)) {
-            element.title = title;
-            element.price = price;
+            element.timestamp = Date.now();
+            element.name = name;
+            element.description = description;
+            element.code = code;
             element.thumbnail = thumbnail;
+            element.price = price;
+            element.stock = stock;
         }
     });
     await fs.promises.writeFile(`./productos.json`, JSON.stringify(data));
     let objeto = {
         id,
-        title,
+        timestamp,
+        name,
+        description,
+        code,
+        thumbnail,
         price,
-        thumbnail 
+        stock
     }
     res.send(objeto);
 })
