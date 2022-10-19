@@ -12,14 +12,14 @@ const contenedor = new Contenedor("productos.json");
 
 //GET
 
-router.get('/', async (req, res) => {
-    const data = await contenedor.getAll();
-    res.send(data);
-})
-
-router.get('/:id', async (req, res) => {
+router.get('/:id?', async (req, res) => {
     let { id } = req.params;
-    const data = await contenedor.getById(parseInt(id));
+    let data;
+    if (!!id) {
+        data = await contenedor.getById(parseInt(id));
+    } else {
+        data = await contenedor.getAll();
+    }
     if (!data) {
         return res.json({ error: 'producto no encontrado'});
     }
