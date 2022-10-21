@@ -31,10 +31,22 @@ app.use(loggerMiddleware);
 //Routes
 app.use('/api', apiRoutes);
 
-//GET
+//No implementados
 
 app.get('*', (req, res) => {
-    res.status(404).send('<h1> La página que busca no existe </h1>')
+    res.status(404).json({error: -2, description: 'La ruta del método GET no está implementada'})
+})
+
+app.post('*', (req, res) => {
+    res.status(404).json({error: -2, description: 'La ruta del método POST no está implementada'})
+})
+
+app.put('*', (req, res) => {
+    res.status(404).json({error: -2, description: 'La ruta del método PUT no está implementada'})
+})
+
+app.delete('*', (req, res) => {
+    res.status(404).json({error: -2, description: 'La ruta del método DELETE no está implementada'})
 })
 
 

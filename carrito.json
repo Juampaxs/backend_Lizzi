@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "timestamp": null,
+        "productos":
+        [
+            {
+                "id": 1,
+                "timestamp": 
+                { 
+                    "create": null, 
+                    "update": null 
+                }, 
+                "name": "Producto 1",
+                "description": "Desc 1",
+                "code": "code1",
+                "thumbnail": "link",
+                "price": 123,
+                "stock": 10 
+            }
+        ]
+    }
+]

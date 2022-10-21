@@ -4,6 +4,8 @@ const fs = require('fs');
 
 const router = express.Router();
 
+const admin = true;
+
 //Middlewares
 
 //Routes
@@ -29,10 +31,17 @@ router.get('/:id?', async (req, res) => {
 //POST
 
 router.post('/', async (req, res) => {
+    if (admin == false) {
+        return res.json({ error: -1, description: 'ruta /productos/ método POST no autorizado'});
+    }
     let { name, description, code, thumbnail, price, stock} = req.body;
     let objeto = {
         id: null,
-        timestamp: Date.now(), 
+        timestamp: 
+        {
+            create: Date.now(), 
+            update: null
+        },
         name,
         description,
         code,
@@ -47,12 +56,15 @@ router.post('/', async (req, res) => {
 //PUT
 
 router.put('/:id', async (req, res) => {
+    if (admin == false) {
+        return res.json({ error: -1, description: 'ruta /productos/:id método PUT no autorizado'});
+    }
     let { id } = req.params;
     let { name, description, code, thumbnail, price, stock} = req.body;
     let data = await contenedor.getAll();
     data.forEach(element => {
         if (element.id == parseInt(id)) {
-            element.timestamp = Date.now();
+            element.timestamp.update = Date.now();
             element.name = name;
             element.description = description;
             element.code = code;
@@ -78,6 +90,9 @@ router.put('/:id', async (req, res) => {
 //DELETE
 
 router.delete('/:id', async (req, res) => {
+    if (admin == false) {
+        return res.json({ error: -1, description: 'ruta /productos/:id método DELETE no autorizado'});
+    }
     const { id } = req.params;
     const data = await contenedor.deleteById(parseInt(id));
     res.send(data);
